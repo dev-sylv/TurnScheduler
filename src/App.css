@@ -142,8 +142,13 @@ button {
   transition: all 500ms;
 }
 
+@media screen and (max-width: 500px) {
+  .card {
+    width: 330px;
+  }
+}
 @media screen and (max-width: 320px) {
   .card {
-    width: 300px;
+    width: 290px;
   }
 }

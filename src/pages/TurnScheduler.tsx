@@ -1,35 +1,19 @@
-import React, { useState } from "react";
-import { getTurnDates, names } from "../functions/useGetTurnsDate";
-import { useTurnState } from "../functions/useTurnState";
 import "../App.css";
+import React, { useState, useEffect } from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { MdOutlineDateRange } from "react-icons/md";
+import useTurnScheduler from "../functions/functions";
 
 const TurnScheduler: React.FC = () => {
   const {
     currentTurn,
     currentDate,
-    handleNextTurn,
-    setCurrentDate,
-    setCurrentTurn,
-  } = useTurnState();
-
-  const handleAdvance = () => {
-    handleNextTurn();
-  };
-  const handleBackward = () => {
-    if (currentTurn > 0) {
-      setCurrentTurn(currentTurn - 1); // Go back to the previous person
-    }
-    const newDate = new Date(currentDate);
-    newDate.setDate(currentDate.getDate() - 2); // Go back to the previous person
-    setCurrentDate(newDate);
-  };
-  const [date1startAdvance, date2startAdvance] = getTurnDates(
-    currentDate,
-    currentTurn
-  );
-
+    handleAdvance,
+    handleBackward,
+    date1startAdvance,
+    date2startAdvance,
+    names,
+  } = useTurnScheduler();
   return (
     <div className="container">
       <h2>
@@ -40,12 +24,7 @@ const TurnScheduler: React.FC = () => {
           <div className="header">
             <div className="img"></div>
             <b>
-              {
-                names[
-                  ((currentTurn % names.length) + names.length) % names.length
-                ]
-              }{" "}
-              <p>Turn Scheduler</p>
+              {names[currentTurn]} <p>Turn Scheduler</p>
             </b>
           </div>
           <div onClick={handleBackward} className="icon">
@@ -59,7 +38,7 @@ const TurnScheduler: React.FC = () => {
             <MdOutlineDateRange size={30} />
           </div>
           <div className="dateTextWrap">
-            <p>Date 1</p>
+            <p>Day 1</p>
             <strong>{date1startAdvance}</strong>
           </div>
         </div>
@@ -68,12 +47,12 @@ const TurnScheduler: React.FC = () => {
             <MdOutlineDateRange size={30} />
           </div>
           <div className="dateTextWrap">
-            <p>Date 2</p>
+            <p>Day 2</p>
             <strong>{date2startAdvance}</strong>
           </div>
         </div>
         <button type="button" onClick={handleAdvance}>
-          next person
+          Next person
         </button>
       </div>
     </div>
