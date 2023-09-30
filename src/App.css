@@ -70,14 +70,8 @@ hr {
   margin-bottom: 15px;
 }
 
-h2 {
-  margin-bottom: 20px;
-  margin-right: 25px;
-}
-
 em {
   color: white;
-  width: 100%;
   margin-left: 40px;
 }
 
@@ -102,6 +96,10 @@ i {
   background-color: transparent;
   border-radius: 17px;
   margin-bottom: 20px;
+}
+h2 {
+  margin-bottom: 20px;
+  margin-right: 25px;
 }
 .dateWrapper2 {
   border: 1px solid gray;
