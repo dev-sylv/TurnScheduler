@@ -7,7 +7,6 @@ import useTurnScheduler from "../functions/functions";
 const TurnScheduler: React.FC = () => {
   const {
     currentTurn,
-    currentDate,
     handleAdvance,
     handleBackward,
     date1startAdvance,

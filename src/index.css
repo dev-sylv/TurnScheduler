@@ -1,5 +1,7 @@
 * {
   margin: 0;
+  padding: 0;
+  overflow: hidden;
 }
 
 body {
@@ -11,4 +13,3 @@ body {
   font-family: "Roboto", sans-serif;
   font-family: "Work Sans", sans-serif;
 }
-
