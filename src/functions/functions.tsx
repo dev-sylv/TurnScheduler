@@ -1,42 +1,38 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
+// import { useSunday } from "./checkSunday";
 
 const useTurnScheduler = () => {
-  const names: string[] = ["Grace", "Dennis", "Tola", "Dami"];
+  const names: string[] = ["Dami", "Dennis", "Grace", "Tola"];
   const [currentTurn, setCurrentTurn] = useState(0);
-  const [currentDate, setCurrentDate] = useState(moment().set({ month: 9, date: 1 }));
+  const [currentDate, setCurrentDate] = useState(moment());
 
   // .set({ month: 9, date: 1 })
   const startDate = moment("2023-08-01"); // Start date is August 1st, 2023
 
   const isSunday = currentDate.format("dddd") === "Sunday";
+  const isMonday = currentDate.format("dddd") === "Monday";
 
   useEffect(() => {
-    const daysElapsed = currentDate.diff(startDate, "days");
-    const newTurn = Math.floor((daysElapsed / 2) % names.length);
-    setCurrentTurn(newTurn);
+    if (isSunday) {
+      setCurrentTurn(1);
+    } else {
+      const daysElapsed = currentDate.diff(startDate, "days");
+      const newTurn = Math.floor((daysElapsed / 2) % names.length);
+      setCurrentTurn(newTurn);
+    }
   }, [currentDate]);
-  // useEffect(() => {
-  //   if (isSunday) {
-  //     setCurrentTurn(1);
-  //   } else {
-  //     const daysElapsed = currentDate.diff(startDate, "days");
-  //     const newTurn = Math.floor((daysElapsed / 2) % names.length);
-  //     setCurrentTurn(newTurn);
-  //   }
-  // }, [currentDate]);
 
   const handleAdvance = () => {
     setCurrentTurn((prevTurn) => (prevTurn + 1) % names.length);
     console.log("ee", currentTurn);
 
-    advanceDate(2); // Advance by 2 days
-    // advanceDate(isSunday ? 1 : 2); // Advance by 2 days
+    advanceDate(isSunday ? 1 : 2); // Advance by 2 days
   };
 
   const handleBackward = () => {
     setCurrentTurn((prevTurn) => (prevTurn - 1 + names.length) % names.length);
-    advanceDate(-2); // Go back by 2 days
+    advanceDate(isMonday ? -1 : -2); // Go back by 2 days
   };
 
   const advanceDate = (days: number) => {

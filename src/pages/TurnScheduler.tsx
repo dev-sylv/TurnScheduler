@@ -34,7 +34,7 @@ const TurnScheduler: React.FC = () => {
         </div>
         <hr />
         <i>Check Your Turn</i>
-        {/* {isSunday ? (
+        {isSunday ? (
           // Render only one date on Sundays
           <div className="dateWrapper">
             <div className="dateIcon">
@@ -46,28 +46,28 @@ const TurnScheduler: React.FC = () => {
             </div>
           </div>
         ) : (
-          // Render two dates on other days */}
-        <>
-          <div className="dateWrapper">
-            <div className="dateIcon">
-              <MdOutlineDateRange size={30} />
+          // Render two dates on other days
+          <>
+            <div className="dateWrapper">
+              <div className="dateIcon">
+                <MdOutlineDateRange size={30} />
+              </div>
+              <div className="dateTextWrap">
+                <p>Day 1</p>
+                <strong>{date1startAdvance}</strong>
+              </div>
             </div>
-            <div className="dateTextWrap">
-              <p>Day 1</p>
-              <strong>{date1startAdvance}</strong>
+            <div className="dateWrapper2">
+              <div className="dateIcon">
+                <MdOutlineDateRange size={30} />
+              </div>
+              <div className="dateTextWrap">
+                <p>Day 2</p>
+                <strong>{date2startAdvance}</strong>
+              </div>
             </div>
-          </div>
-          <div className="dateWrapper2">
-            <div className="dateIcon">
-              <MdOutlineDateRange size={30} />
-            </div>
-            <div className="dateTextWrap">
-              <p>Day 2</p>
-              <strong>{date2startAdvance}</strong>
-            </div>
-          </div>
-        </>
-        {/* )} */}
+          </>
+        )}
         <button type="button" onClick={handleAdvance}>
           Next person
         </button>
