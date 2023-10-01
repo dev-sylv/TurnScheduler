@@ -1,25 +1,37 @@
-// useTurnScheduler.ts
 import { useState, useEffect } from "react";
+import moment from "moment";
 
 const useTurnScheduler = () => {
-  const names: string[] = ["Dami", "Dennis", "Tola", "Grace"];
+  const names: string[] = ["Grace", "Dennis", "Tola", "Dami"];
   const [currentTurn, setCurrentTurn] = useState(0);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(moment().set({ month: 9, date: 1 }));
+
+  // .set({ month: 9, date: 1 })
+  const startDate = moment("2023-08-01"); // Start date is August 1st, 2023
+
+  const isSunday = currentDate.format("dddd") === "Sunday";
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTurn((prevTurn) => (prevTurn + 1) % names.length);
-      advanceDate(1); // Advance by 1 day
-    }, 2 * 24 * 60 * 60 * 1000); // 2 days in milliseconds
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
+    const daysElapsed = currentDate.diff(startDate, "days");
+    const newTurn = Math.floor((daysElapsed / 2) % names.length);
+    setCurrentTurn(newTurn);
+  }, [currentDate]);
+  // useEffect(() => {
+  //   if (isSunday) {
+  //     setCurrentTurn(1);
+  //   } else {
+  //     const daysElapsed = currentDate.diff(startDate, "days");
+  //     const newTurn = Math.floor((daysElapsed / 2) % names.length);
+  //     setCurrentTurn(newTurn);
+  //   }
+  // }, [currentDate]);
 
   const handleAdvance = () => {
     setCurrentTurn((prevTurn) => (prevTurn + 1) % names.length);
+    console.log("ee", currentTurn);
+
     advanceDate(2); // Advance by 2 days
+    // advanceDate(isSunday ? 1 : 2); // Advance by 2 days
   };
 
   const handleBackward = () => {
@@ -28,42 +40,29 @@ const useTurnScheduler = () => {
   };
 
   const advanceDate = (days: number) => {
-    const newDate = new Date(currentDate);
-    newDate.setDate(newDate.getDate() + days);
+    const newDate = moment(currentDate).add(days, "days");
     setCurrentDate(newDate);
   };
 
   const getTurnDates = () => {
-    const startDateAdvance = new Date(currentDate);
-    startDateAdvance.setHours(19, 0, 0);
+    const startDateAdvance = moment(currentDate)
+      .startOf("day")
+      .set({ hour: 19, minute: 0, second: 0 });
 
-    const endDateAdvance = new Date(startDateAdvance);
-    endDateAdvance.setDate(endDateAdvance.getDate() + 1);
+    const endDateAdvance = moment(startDateAdvance).add(1, "days");
 
-    const options: Intl.DateTimeFormatOptions = {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    };
-
-    const date1startAdvance = startDateAdvance.toLocaleDateString(
-      "en-US",
-      options
-    );
-    const date2startAdvance = endDateAdvance.toLocaleDateString(
-      "en-US",
-      options
-    );
+    const date1startAdvance = startDateAdvance.format("dddd, MMMM D, YYYY");
+    const date2startAdvance = endDateAdvance.format("dddd, MMMM D, YYYY");
 
     return {
       currentTurn,
-      currentDate,
+      currentDate: currentDate.format("dddd, MMMM D, YYYY"),
       handleAdvance,
       handleBackward,
       date1startAdvance,
       date2startAdvance,
       names,
+      isSunday,
     };
   };
 

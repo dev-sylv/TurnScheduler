@@ -12,7 +12,9 @@ const TurnScheduler: React.FC = () => {
     date1startAdvance,
     date2startAdvance,
     names,
+    isSunday, // Add isSunday from useTurnScheduler
   } = useTurnScheduler();
+
   return (
     <div className="container">
       <h2>
@@ -32,24 +34,40 @@ const TurnScheduler: React.FC = () => {
         </div>
         <hr />
         <i>Check Your Turn</i>
-        <div className="dateWrapper">
-          <div className="dateIcon">
-            <MdOutlineDateRange size={30} />
+        {/* {isSunday ? (
+          // Render only one date on Sundays
+          <div className="dateWrapper">
+            <div className="dateIcon">
+              <MdOutlineDateRange size={30} />
+            </div>
+            <div className="dateTextWrap">
+              <p>Day 1</p>
+              <strong>{date1startAdvance}</strong>
+            </div>
           </div>
-          <div className="dateTextWrap">
-            <p>Day 1</p>
-            <strong>{date1startAdvance}</strong>
+        ) : (
+          // Render two dates on other days */}
+        <>
+          <div className="dateWrapper">
+            <div className="dateIcon">
+              <MdOutlineDateRange size={30} />
+            </div>
+            <div className="dateTextWrap">
+              <p>Day 1</p>
+              <strong>{date1startAdvance}</strong>
+            </div>
           </div>
-        </div>
-        <div className="dateWrapper2">
-          <div className="dateIcon">
-            <MdOutlineDateRange size={30} />
+          <div className="dateWrapper2">
+            <div className="dateIcon">
+              <MdOutlineDateRange size={30} />
+            </div>
+            <div className="dateTextWrap">
+              <p>Day 2</p>
+              <strong>{date2startAdvance}</strong>
+            </div>
           </div>
-          <div className="dateTextWrap">
-            <p>Day 2</p>
-            <strong>{date2startAdvance}</strong>
-          </div>
-        </div>
+        </>
+        {/* )} */}
         <button type="button" onClick={handleAdvance}>
           Next person
         </button>
