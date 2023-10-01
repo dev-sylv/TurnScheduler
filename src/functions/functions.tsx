@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import moment from "moment";
-// import { useSunday } from "./checkSunday";
 
 const useTurnScheduler = () => {
   const names: string[] = ["Dami", "Dennis", "Grace", "Tola"];
