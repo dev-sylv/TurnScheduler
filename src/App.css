@@ -88,7 +88,7 @@ i {
 }
 
 .dateWrapper {
-  border: 1px solid rgb(26, 102, 255);
+  /* border: 1px solid rgb(26, 102, 255); */
   width: 88%;
   display: flex;
   align-items: center;
@@ -102,7 +102,7 @@ h2 {
   margin-right: 25px;
 }
 .dateWrapper2 {
-  border: 1px solid gray;
+  /* border: 1px solid gray; */
   width: 88%;
   display: flex;
   align-items: center;

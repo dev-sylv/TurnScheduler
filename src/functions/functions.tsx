@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import moment from "moment";
 
 const useTurnScheduler = () => {
-  const names: string[] = ["Dami", "Dennis", "Grace", "Tola"];
+  const turns: string[] = ["Dami", "Dennis", "Grace", "Tola"];
   const [currentTurn, setCurrentTurn] = useState(0);
   const [currentDate, setCurrentDate] = useState(moment());
 
@@ -17,20 +17,18 @@ const useTurnScheduler = () => {
       setCurrentTurn(1);
     } else {
       const daysElapsed = currentDate.diff(startDate, "days");
-      const newTurn = Math.floor((daysElapsed / 2) % names.length);
+      const newTurn = Math.floor((daysElapsed / 2) % turns.length);
       setCurrentTurn(newTurn);
     }
   }, [currentDate]);
 
   const handleAdvance = () => {
-    setCurrentTurn((prevTurn) => (prevTurn + 1) % names.length);
-    console.log("ee", currentTurn);
-
+    setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
     advanceDate(isSunday ? 1 : 2); // Advance by 2 days
   };
 
   const handleBackward = () => {
-    setCurrentTurn((prevTurn) => (prevTurn - 1 + names.length) % names.length);
+    setCurrentTurn((prevTurn) => (prevTurn - 1 + turns.length) % turns.length);
     advanceDate(isMonday ? -1 : -2); // Go back by 2 days
   };
 
@@ -56,7 +54,7 @@ const useTurnScheduler = () => {
       handleBackward,
       date1startAdvance,
       date2startAdvance,
-      names,
+      turns,
       isSunday,
     };
   };
