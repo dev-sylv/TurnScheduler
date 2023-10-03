@@ -37,15 +37,24 @@ const useTurnScheduler = () => {
     setCurrentDate(newDate);
   };
 
+  let isCurrentDateOdd = currentDate.date() % 2 === 1;
   const getTurnDates = () => {
     const startDateAdvance = moment(currentDate)
       .startOf("day")
       .set({ hour: 19, minute: 0, second: 0 });
 
-    const endDateAdvance = moment(startDateAdvance).add(1, "days");
+    let endDateAdvance = moment(startDateAdvance).add(1, "days");
+    let date1startAdvance = startDateAdvance.format("dddd, MMMM D, YYYY");
+    let date2startAdvance = endDateAdvance.format("dddd, MMMM D, YYYY");
 
-    const date1startAdvance = startDateAdvance.format("dddd, MMMM D, YYYY");
-    const date2startAdvance = endDateAdvance.format("dddd, MMMM D, YYYY");
+    if (isCurrentDateOdd) {
+      date2startAdvance = date1startAdvance;
+      // If today's date is odd, set date1startAdvance to the day before itself,
+      // and date2startAdvance to date1startAdvance
+      date1startAdvance = moment(startDateAdvance)
+        .subtract(1, "days")
+        .format("dddd, MMMM D, YYYY");
+    }
 
     return {
       currentTurn,
@@ -56,6 +65,7 @@ const useTurnScheduler = () => {
       date2startAdvance,
       turns,
       isSunday,
+      isCurrentDateOdd,
     };
   };
 

@@ -2,7 +2,7 @@ import React from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { MdOutlineDateRange } from "react-icons/md";
 import useTurnScheduler from "../functions/functions";
-import moment from "moment"; 
+import moment from "moment";
 import "../App.css";
 
 const TurnScheduler: React.FC = () => {
@@ -17,11 +17,13 @@ const TurnScheduler: React.FC = () => {
   } = useTurnScheduler();
 
   const today = moment();
-  
-  const date1Style = today.isSame(date1startAdvance, "day") ? { border: "1px solid rgb(26, 102, 255)" } : { border: "1px solid gray" };
-  const date2Style = today.isSame(date2startAdvance, "day") ? { border: "1px solid rgb(26, 102, 255)" } : { border: "1px solid gray" };
 
-  
+  const date1Style = today.isSame(date1startAdvance, "day")
+    ? { border: "1px solid rgb(26, 102, 255)" }
+    : { border: "1px solid gray" };
+  const date2Style = today.isSame(date2startAdvance, "day")
+    ? { border: "1px solid rgb(26, 102, 255)" }
+    : { border: "1px solid gray" };
 
   return (
     <div className="container">
@@ -43,7 +45,9 @@ const TurnScheduler: React.FC = () => {
         <hr />
         <i>Check Your Turn</i>
         {isSunday ? (
-          <div className="dateWrapper" style={{border: "1px solid rgb(26, 102, 255)"}}>
+          <div
+            className="dateWrapper"
+            style={{ border: "1px solid rgb(26, 102, 255)" }}>
             <div className="dateIcon">
               <MdOutlineDateRange size={30} />
             </div>
