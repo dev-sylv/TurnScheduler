@@ -47,15 +47,6 @@ const useTurnScheduler = () => {
     let date1startAdvance = startDateAdvance.format("dddd, MMMM D, YYYY");
     let date2startAdvance = endDateAdvance.format("dddd, MMMM D, YYYY");
 
-    if (isCurrentDateOdd) {
-      date2startAdvance = date1startAdvance;
-      // If today's date is odd, set date1startAdvance to the day before itself,
-      // and date2startAdvance to date1startAdvance
-      date1startAdvance = moment(startDateAdvance)
-        .subtract(1, "days")
-        .format("dddd, MMMM D, YYYY");
-    }
-
     return {
       currentTurn,
       currentDate: currentDate.format("dddd, MMMM D, YYYY"),

@@ -47,7 +47,8 @@ const TurnScheduler: React.FC = () => {
         {isSunday ? (
           <div
             className="dateWrapper"
-            style={{ border: "1px solid rgb(26, 102, 255)" }}>
+            style={{ border: "1px solid rgb(26, 102, 255)" }}
+          >
             <div className="dateIcon">
               <MdOutlineDateRange size={30} />
             </div>
