@@ -6,7 +6,7 @@ const useTurnScheduler = () => {
   const [currentTurn, setCurrentTurn] = useState(0);
   const [currentDate, setCurrentDate] = useState(moment());
   const [lastSunday, setLastSunday] = useState(currentDate.clone());
-
+  // .set({ year: 2023, month: 9, date: 3 })
   const startDate = moment("2023-08-01");
 
   const isSunday = currentDate.format("dddd") === "Sunday";
