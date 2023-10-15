@@ -6,30 +6,34 @@ const useTurnScheduler = () => {
   const [currentTurn, setCurrentTurn] = useState(0);
   const [currentDate, setCurrentDate] = useState(moment());
 
-  // .set({ month: 9, date: 1 })
-  const startDate = moment("2023-08-01"); // Start date is August 1st, 2023
+  const startDate = moment("2023-08-01");
 
   const isSunday = currentDate.format("dddd") === "Sunday";
   const isMonday = currentDate.format("dddd") === "Monday";
 
   useEffect(() => {
     if (isSunday) {
-      setCurrentTurn(1);
+      const lastSundayTurn =
+        Math.floor((currentDate.diff(startDate, "days") - 7) / 2) %
+        turns.length;
+      if (currentTurn === lastSundayTurn) {
+        setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
+      }
     } else {
       const daysElapsed = currentDate.diff(startDate, "days");
       const newTurn = Math.floor((daysElapsed / 2) % turns.length);
       setCurrentTurn(newTurn);
     }
-  }, [currentDate]);
+  }, [currentDate, currentTurn, isSunday]);
 
   const handleAdvance = () => {
     setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
-    advanceDate(isSunday ? 1 : 2); // Advance by 2 days
+    advanceDate(isSunday ? 1 : 2);
   };
 
   const handleBackward = () => {
     setCurrentTurn((prevTurn) => (prevTurn - 1 + turns.length) % turns.length);
-    advanceDate(isMonday ? -1 : -2); // Go back by 2 days
+    advanceDate(isMonday ? -1 : -2);
   };
 
   const advanceDate = (days: number) => {
