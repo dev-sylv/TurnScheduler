@@ -7,6 +7,9 @@ const useTurnScheduler = () => {
   const [currentDate, setCurrentDate] = useState(moment());
   const [lastSunday, setLastSunday] = useState(currentDate.clone());
   const startDate = moment("2023-08-01");
+  const [hasTakenTurn, setHasTakenTurn] = useState(
+    Array(turns.length).fill(false)
+  );
 
   const isSunday = currentDate.format("dddd") === "Sunday";
   const isMonday = currentDate.format("dddd") === "Monday";
@@ -16,17 +19,31 @@ const useTurnScheduler = () => {
       if (currentDate.diff(lastSunday, "days") >= 7) {
         setLastSunday(currentDate.clone());
         let nextTurn = (currentTurn + 1) % turns.length;
-        if (turns[nextTurn] === "Sunday") {
+        while (hasTakenTurn[nextTurn]) {
           nextTurn = (nextTurn + 1) % turns.length;
         }
         setCurrentTurn(nextTurn);
+        setHasTakenTurn((prev) => {
+          const updated = [...prev];
+          updated[nextTurn] = true;
+          return updated;
+        });
       }
     } else {
       const daysElapsed = currentDate.diff(startDate, "days");
       const newTurn = Math.floor((daysElapsed / 2) % turns.length);
       setCurrentTurn(newTurn);
     }
-  }, [currentDate, currentTurn, isSunday, lastSunday]);
+  }, [
+    currentDate,
+    currentTurn,
+    isSunday,
+    lastSunday,
+    startDate,
+    turns,
+    hasTakenTurn,
+  ]);
+
   const nextTurn = () => {
     setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
   };
