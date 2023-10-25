@@ -66,6 +66,11 @@ const useTurnScheduler = () => {
     const date1startAdvance = startDateAdvance.format("dddd, MMMM D, YYYY");
     const date2startAdvance = endDateAdvance.format("dddd, MMMM D, YYYY");
 
+    const handleRefresh = () => {
+      const currentDate = moment();
+      setCurrentDate(currentDate);
+    };
+
     return {
       currentTurn,
       currentDate: currentDate.format("dddd, MMMM D, YYYY"),
@@ -77,6 +82,7 @@ const useTurnScheduler = () => {
       isSunday: currentDate.format("dddd") === "Sunday",
       isCurrentDateOdd,
       setCurrentDate,
+      handleRefresh
     };
   };
 

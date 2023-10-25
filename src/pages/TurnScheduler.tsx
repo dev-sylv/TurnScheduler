@@ -4,7 +4,7 @@ import { MdOutlineDateRange } from "react-icons/md";
 import moment from "moment";
 import "../App.css";
 import useTurnScheduler from "../functions/functions";
-import { IoRefresh } from "react-icons/io5";
+import { FaSync } from "react-icons/fa";
 
 const TurnScheduler: React.FC = () => {
   const {
@@ -15,7 +15,7 @@ const TurnScheduler: React.FC = () => {
     date2startAdvance,
     turns,
     isSunday,
-    setCurrentDate,
+    handleRefresh,
   } = useTurnScheduler();
 
   const today = moment();
@@ -26,11 +26,6 @@ const TurnScheduler: React.FC = () => {
   const date2Style = today.isSame(date2startAdvance, "day")
     ? { border: "1px solid rgb(26, 102, 255)" }
     : { border: "1px solid gray" };
-
-  const handleRefresh = () => {
-    const currentDate = moment();
-    setCurrentDate(currentDate);
-  };
 
   return (
     <div className="container">
@@ -48,8 +43,9 @@ const TurnScheduler: React.FC = () => {
           <div onClick={handleBackward} className="icon">
             <IoChevronBack size={20} style={{ marginRight: "4px" }} />
           </div>
-          <div onClick={handleRefresh} className="icon">
-            <IoRefresh size={20} style={{ marginRight: "4px" }} />
+          <div onClick={handleRefresh} className="refresh">
+            {" "}
+            <FaSync size={20} style={{ marginRight: "4px" }} />
           </div>
         </div>
         <hr />
