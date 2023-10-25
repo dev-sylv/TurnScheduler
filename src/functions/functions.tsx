@@ -76,6 +76,7 @@ const useTurnScheduler = () => {
       turns,
       isSunday: currentDate.format("dddd") === "Sunday",
       isCurrentDateOdd,
+      setCurrentDate,
     };
   };
 
