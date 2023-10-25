@@ -1,38 +1,30 @@
 import { useState, useEffect } from "react";
-import moment, { Moment } from "moment";
+import moment from "moment";
 
-interface UseTurnSchedulerProps {
-  currentDate: Moment;
-  currentTurn: number;
-  lastSunday: Moment;
-  startDate: Moment;
-  turns: string[];
-  hasTakenTurn: boolean[];
-  setHasTakenTurn: React.Dispatch<React.SetStateAction<boolean[]>>;
-}
-
-const useTurnScheduler = (props: UseTurnSchedulerProps) => {
-  const {
-    currentDate,
-    currentTurn,
-    lastSunday,
-    startDate,
-    turns,
-    hasTakenTurn,
-    setHasTakenTurn,
-  } = props;
-
-  const isSunday = currentDate.format("dddd") === "Sunday";
+const useTurnScheduler = () => {
+  const turns: string[] = ["Dami", "Dennis", "Grace", "Tola"];
+  const [currentTurn, setCurrentTurn] = useState(0);
+  const [currentDate, setCurrentDate] = useState(moment());
+  const [lastSunday, setLastSunday] = useState(currentDate.clone());
+  const [hasTakenTurn, setHasTakenTurn] = useState(
+    Array(turns.length).fill(false)
+  );
+  const startDate = moment("2023-08-01");
 
   useEffect(() => {
+    const isSunday = currentDate.format("dddd") === "Sunday";
+    const isMonday = currentDate.format("dddd") === "Monday";
+
     if (isSunday) {
       if (currentDate.diff(lastSunday, "days") >= 7) {
+        setLastSunday(currentDate.clone());
+        let nextTurn = (currentTurn + 1) % turns.length;
+        while (hasTakenTurn[nextTurn]) {
+          nextTurn = (nextTurn + 1) % turns.length;
+        }
+        setCurrentTurn(nextTurn);
         setHasTakenTurn((prev) => {
           const updated = [...prev];
-          let nextTurn = (currentTurn + 1) % turns.length;
-          while (updated[nextTurn]) {
-            nextTurn = (nextTurn + 1) % turns.length;
-          }
           updated[nextTurn] = true;
           return updated;
         });
@@ -42,15 +34,7 @@ const useTurnScheduler = (props: UseTurnSchedulerProps) => {
       const newTurn = Math.floor((daysElapsed / 2) % turns.length);
       setCurrentTurn(newTurn);
     }
-  }, [
-    currentDate,
-    currentTurn,
-    isSunday,
-    lastSunday,
-    startDate,
-    turns,
-    setHasTakenTurn,
-  ]);
+  }, [currentDate, currentTurn, hasTakenTurn, lastSunday, startDate, turns]);
 
   const nextTurn = () => {
     setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
@@ -58,12 +42,12 @@ const useTurnScheduler = (props: UseTurnSchedulerProps) => {
 
   const handleAdvance = () => {
     nextTurn();
-    advanceDate(isSunday ? 1 : 2);
+    advanceDate(1);
   };
 
   const handleBackward = () => {
     setCurrentTurn((prevTurn) => (prevTurn - 1 + turns.length) % turns.length);
-    advanceDate(currentDate.format("dddd") === "Monday" ? -1 : -2);
+    advanceDate(-2);
   };
 
   const advanceDate = (days: number) => {
@@ -71,24 +55,31 @@ const useTurnScheduler = (props: UseTurnSchedulerProps) => {
     setCurrentDate(newDate);
   };
 
-  let isCurrentDateOdd = currentDate.date() % 2 === 1;
+  const isCurrentDateOdd = currentDate.date() % 2 === 1;
 
-  const startDateAdvance = moment(currentDate)
-    .startOf("day")
-    .set({ hour: 19, minute: 0, second: 0 });
-  const endDateAdvance = moment(startDateAdvance).add(1, "days");
+  const getTurnDates = () => {
+    const startDateAdvance = moment(currentDate)
+      .startOf("day")
+      .set({ hour: 19, minute: 0, second: 0 });
 
-  return {
-    currentTurn,
-    currentDate: currentDate.format("dddd, MMMM D, YYYY"),
-    handleAdvance,
-    handleBackward,
-    date1startAdvance: startDateAdvance.format("dddd, MMMM D, YYYY"),
-    date2startAdvance: endDateAdvance.format("dddd, MMMM D, YYYY"),
-    turns,
-    isSunday,
-    isCurrentDateOdd,
+    const endDateAdvance = moment(startDateAdvance).add(1, "days");
+    const date1startAdvance = startDateAdvance.format("dddd, MMMM D, YYYY");
+    const date2startAdvance = endDateAdvance.format("dddd, MMMM D, YYYY");
+
+    return {
+      currentTurn,
+      currentDate: currentDate.format("dddd, MMMM D, YYYY"),
+      handleAdvance,
+      handleBackward,
+      date1startAdvance,
+      date2startAdvance,
+      turns,
+      isSunday: currentDate.format("dddd") === "Sunday",
+      isCurrentDateOdd,
+    };
   };
+
+  return getTurnDates();
 };
 
 export default useTurnScheduler;
