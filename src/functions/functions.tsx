@@ -6,24 +6,22 @@ const useTurnScheduler = () => {
   const [currentTurn, setCurrentTurn] = useState(0);
   const [currentDate, setCurrentDate] = useState(moment());
   const [lastSunday, setLastSunday] = useState(currentDate.clone());
-  // .set({ year: 2023, month: 9, date: 3 })
   const startDate = moment("2023-08-01");
 
   const isSunday = currentDate.format("dddd") === "Sunday";
   const isMonday = currentDate.format("dddd") === "Monday";
 
   useEffect(() => {
-    if (isSunday) {
-      if (currentDate.diff(lastSunday, "days") >= 7) {
-        setLastSunday(currentDate.clone());
-        setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
-      }
-    } else {
-      const daysElapsed = currentDate.diff(startDate, "days");
+    const daysElapsed = currentDate.diff(startDate, "days");
+
+    if (isSunday && currentDate.diff(lastSunday, "days") >= 7) {
+      setLastSunday(currentDate.clone());
+      setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
+    } else if (!isSunday && daysElapsed % 2 === 1) {
       const newTurn = Math.floor((daysElapsed / 2) % turns.length);
       setCurrentTurn(newTurn);
     }
-  }, [currentDate, currentTurn, isSunday, lastSunday]);
+  }, [currentDate, isSunday, lastSunday, startDate, turns.length]);
 
   const handleAdvance = () => {
     setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
@@ -40,7 +38,6 @@ const useTurnScheduler = () => {
     setCurrentDate(newDate);
   };
 
-  let isCurrentDateOdd = currentDate.date() % 2 === 1;
   const getTurnDates = () => {
     const startDateAdvance = moment(currentDate)
       .startOf("day")
@@ -59,7 +56,6 @@ const useTurnScheduler = () => {
       date2startAdvance,
       turns,
       isSunday,
-      isCurrentDateOdd,
     };
   };
 
