@@ -1,10 +1,9 @@
 import React from "react";
 import { IoChevronBack } from "react-icons/io5";
 import { MdOutlineDateRange } from "react-icons/md";
+import useTurnScheduler from "../functions/functions";
 import moment from "moment";
 import "../App.css";
-import useTurnScheduler from "../functions/functions";
-import { FaSync } from "react-icons/fa";
 
 const TurnScheduler: React.FC = () => {
   const {
@@ -15,7 +14,6 @@ const TurnScheduler: React.FC = () => {
     date2startAdvance,
     turns,
     isSunday,
-    handleRefresh,
   } = useTurnScheduler();
 
   const today = moment();
@@ -42,10 +40,6 @@ const TurnScheduler: React.FC = () => {
           </div>
           <div onClick={handleBackward} className="icon">
             <IoChevronBack size={20} style={{ marginRight: "4px" }} />
-          </div>
-          <div onClick={handleRefresh} className="refresh">
-            {" "}
-            <FaSync size={20} style={{ marginRight: "4px" }} />
           </div>
         </div>
         <hr />

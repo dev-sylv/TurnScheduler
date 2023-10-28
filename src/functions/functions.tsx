@@ -6,48 +6,33 @@ const useTurnScheduler = () => {
   const [currentTurn, setCurrentTurn] = useState(0);
   const [currentDate, setCurrentDate] = useState(moment());
   const [lastSunday, setLastSunday] = useState(currentDate.clone());
-  const [hasTakenTurn, setHasTakenTurn] = useState(
-    Array(turns.length).fill(false)
-  );
+  // .set({ year: 2023, month: 9, date: 3 })
   const startDate = moment("2023-08-01");
 
-  useEffect(() => {
-    const isSunday = currentDate.format("dddd") === "Sunday";
-    const isMonday = currentDate.format("dddd") === "Monday";
+  const isSunday = currentDate.format("dddd") === "Sunday";
+  const isMonday = currentDate.format("dddd") === "Monday";
 
+  useEffect(() => {
     if (isSunday) {
       if (currentDate.diff(lastSunday, "days") >= 7) {
         setLastSunday(currentDate.clone());
-        let nextTurn = (currentTurn + 1) % turns.length;
-        while (hasTakenTurn[nextTurn]) {
-          nextTurn = (nextTurn + 1) % turns.length;
-        }
-        setCurrentTurn(nextTurn);
-        setHasTakenTurn((prev) => {
-          const updated = [...prev];
-          updated[nextTurn] = true;
-          return updated;
-        });
+        setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
       }
     } else {
       const daysElapsed = currentDate.diff(startDate, "days");
       const newTurn = Math.floor((daysElapsed / 2) % turns.length);
       setCurrentTurn(newTurn);
     }
-  }, [currentDate, currentTurn, hasTakenTurn, lastSunday, startDate, turns]);
-
-  const nextTurn = () => {
-    setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
-  };
+  }, [currentDate, currentTurn, isSunday, lastSunday]);
 
   const handleAdvance = () => {
-    nextTurn();
-    advanceDate(1);
+    setCurrentTurn((prevTurn) => (prevTurn + 1) % turns.length);
+    advanceDate(isSunday ? 1 : 2);
   };
 
   const handleBackward = () => {
     setCurrentTurn((prevTurn) => (prevTurn - 1 + turns.length) % turns.length);
-    advanceDate(-2);
+    advanceDate(isMonday ? -1 : -2);
   };
 
   const advanceDate = (days: number) => {
@@ -55,21 +40,15 @@ const useTurnScheduler = () => {
     setCurrentDate(newDate);
   };
 
-  const isCurrentDateOdd = currentDate.date() % 2 === 1;
-
+  let isCurrentDateOdd = currentDate.date() % 2 === 1;
   const getTurnDates = () => {
     const startDateAdvance = moment(currentDate)
       .startOf("day")
       .set({ hour: 19, minute: 0, second: 0 });
 
-    const endDateAdvance = moment(startDateAdvance).add(1, "days");
-    const date1startAdvance = startDateAdvance.format("dddd, MMMM D, YYYY");
-    const date2startAdvance = endDateAdvance.format("dddd, MMMM D, YYYY");
-
-    const handleRefresh = () => {
-      const currentDate = moment();
-      setCurrentDate(currentDate);
-    };
+    let endDateAdvance = moment(startDateAdvance).add(1, "days");
+    let date1startAdvance = startDateAdvance.format("dddd, MMMM D, YYYY");
+    let date2startAdvance = endDateAdvance.format("dddd, MMMM D, YYYY");
 
     return {
       currentTurn,
@@ -79,10 +58,8 @@ const useTurnScheduler = () => {
       date1startAdvance,
       date2startAdvance,
       turns,
-      isSunday: currentDate.format("dddd") === "Sunday",
+      isSunday,
       isCurrentDateOdd,
-      setCurrentDate,
-      handleRefresh
     };
   };
 
