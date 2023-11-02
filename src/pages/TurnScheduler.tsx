@@ -4,6 +4,7 @@ import { MdOutlineDateRange } from "react-icons/md";
 import moment from "moment";
 import "../App.css";
 import useTurnScheduler from "../functions/functions";
+import { FiRefreshCcw } from "react-icons/fi";
 
 const TurnScheduler: React.FC = () => {
   const {
@@ -14,6 +15,7 @@ const TurnScheduler: React.FC = () => {
     date2startAdvance,
     turns,
     isSunday,
+    handleRefresh,
   } = useTurnScheduler();
 
   const today = moment();
@@ -37,6 +39,9 @@ const TurnScheduler: React.FC = () => {
             <b>
               {turns[currentTurn]} <p>Turn Scheduler</p>
             </b>
+          </div>
+          <div onClick={handleRefresh} className="icon">
+            <FiRefreshCcw size={20} style={{ marginLeft: "4px" }} />
           </div>
           <div onClick={handleBackward} className="icon">
             <IoChevronBack size={20} style={{ marginRight: "4px" }} />

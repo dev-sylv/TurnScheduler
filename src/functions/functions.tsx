@@ -33,6 +33,12 @@ const useTurnScheduler = () => {
     advanceDate(isMonday ? -1 : -2);
   };
 
+  const handleRefresh = () => {
+    setCurrentDate(moment());
+    setLastSunday(moment());
+    setCurrentTurn(0);
+  };
+
   const advanceDate = (days: number) => {
     const newDate = moment(currentDate).add(days, "days");
     setCurrentDate(newDate);
@@ -56,6 +62,7 @@ const useTurnScheduler = () => {
       date2startAdvance,
       turns,
       isSunday,
+      handleRefresh,
     };
   };
 
